@@ -87,3 +87,14 @@ For Claude Code instances working on this codebase, comprehensive working docume
 - **DEVELOPMENT-PROCESS.md** - Systematic development cycle and quality assurance processes
 
 These files provide full context for autonomous development and should be consulted at the start of each working session.
+
+## JavaScript/TypeScript Extension Project
+
+**Overarching Task**: Extend Puku to support JavaScript and TypeScript projects with equivalent functionality to the existing Go implementation.
+
+**Comprehensive Design Documentation**: Located in `docs/js-ts-extension/`:
+
+- **DESIGN.md** - Complete architectural analysis, technical design, and implementation strategy for adding JS/TS support
+- **IMPLEMENTATION-REFERENCE.md** - Detailed technical patterns, extension points, and code examples for implementation
+
+This represents a major architectural extension that will add multi-language support to Puku while maintaining full backward compatibility with existing Go functionality. The design leverages Puku's language-agnostic architecture and extensible configuration system to provide seamless JS/TS integration.
