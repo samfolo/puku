@@ -55,7 +55,6 @@ const (
 	RelativeImport ImportType = iota // ./foo, ../bar
 	BareImport                       // lodash, @types/node
 	BuiltinImport                    // fs, path (Node.js builtins)
-	AssetImport                      // .css, .json files
 )
 
 // IsTest returns whether the Node.js file is a test
@@ -311,14 +310,105 @@ func classifyImportType(importPath string) ImportType {
 		return RelativeImport
 	}
 
-	// Asset imports (common file extensions)
-	ext := filepath.Ext(importPath)
-	if ext == ".css" || ext == ".scss" || ext == ".less" || ext == ".json" || 
-		ext == ".png" || ext == ".jpg" || ext == ".svg" || ext == ".gif" {
-		return AssetImport
-	}
 
 	// Everything else is a bare import (third-party packages, aliases, etc.)
 	// Resolution will happen later during dependency resolution phase
 	return BareImport
+}
+
+// ResolveRelativeImport resolves a relative import path to an absolute path
+// within the project structure, handling ./foo, ../bar, and bare filenames
+func ResolveRelativeImport(currentDir, importPath string) (string, error) {
+	if importPath == "" {
+		return "", fmt.Errorf("empty import path")
+	}
+
+	// Handle relative paths
+	if strings.HasPrefix(importPath, "./") || strings.HasPrefix(importPath, "../") ||
+		importPath == "." || importPath == ".." {
+		
+		absPath := filepath.Join(currentDir, importPath)
+		cleanPath := filepath.Clean(absPath)
+		
+		// Check if the resolved path exists as a directory or file
+		if _, err := os.Stat(cleanPath); os.IsNotExist(err) {
+			// Try with common JS/TS extensions
+			for _, ext := range []string{".js", ".ts", ".jsx", ".tsx", ".mjs", ".cjs"} {
+				if _, err := os.Stat(cleanPath + ext); err == nil {
+					return cleanPath + ext, nil
+				}
+			}
+			
+			// Check for index files in directory
+			indexPath := filepath.Join(cleanPath, "index")
+			for _, ext := range []string{".js", ".ts", ".jsx", ".tsx", ".mjs", ".cjs"} {
+				if _, err := os.Stat(indexPath + ext); err == nil {
+					return indexPath + ext, nil
+				}
+			}
+			
+			return "", fmt.Errorf("could not resolve import %q from %q", importPath, currentDir)
+		}
+		
+		return cleanPath, nil
+	}
+	
+	// For bare imports (no ./ or ../), they should be handled by package resolution
+	return "", fmt.Errorf("not a relative import: %q", importPath)
+}
+
+// FindPackageTarget looks for an existing js_library target in the given directory's BUILD file
+// This mirrors the localDep functionality from the Go implementation
+func FindPackageTarget(dir string) (string, error) {
+	buildFile := filepath.Join(dir, "BUILD")
+	
+	// Check if BUILD file exists
+	if _, err := os.Stat(buildFile); os.IsNotExist(err) {
+		// No BUILD file means no existing target, but could be generated later
+		return "", nil
+	}
+	
+	// For now, we'll return a predictable target name
+	// In the future, this should parse the BUILD file to find actual js_library targets
+	packageName := filepath.Base(dir)
+	return fmt.Sprintf("//%s", packageName), nil
+}
+
+// ResolveDependency resolves a single import to a build target
+// This will be used during build file generation
+func (f *File) ResolveDependency(imp Import, currentDir string) (string, error) {
+	switch imp.Type {
+	case BuiltinImport:
+		// Node.js builtins don't need build targets
+		return "", nil
+		
+	case RelativeImport:
+		// Resolve relative path and find target
+		resolvedPath, err := ResolveRelativeImport(currentDir, imp.Path)
+		if err != nil {
+			return "", fmt.Errorf("resolving relative import %q: %w", imp.Path, err)
+		}
+		
+		// Get the directory containing the resolved file/package
+		targetDir := resolvedPath
+		if !strings.HasSuffix(resolvedPath, "/") {
+			// If it's a file, get its directory
+			targetDir = filepath.Dir(resolvedPath)
+		}
+		
+		target, err := FindPackageTarget(targetDir)
+		if err != nil {
+			return "", fmt.Errorf("finding package target in %q: %w", targetDir, err)
+		}
+		
+		return target, nil
+		
+	case BareImport:
+		// Bare imports need third-party dependency resolution
+		// This will be handled by the main dependency resolution system
+		return "", fmt.Errorf("bare import resolution not implemented: %q", imp.Path)
+		
+	default:
+		return "", fmt.Errorf("unknown import type for %q", imp.Path)
+	}
 }
