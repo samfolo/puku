@@ -79,14 +79,20 @@ The codebase follows Please build conventions with BUILD files in each package d
 
 ## Claude Working Environment
 
+**CRITICAL**: ALWAYS consult `docs/claude-work/WORKING-STANDARDS.md` before making ANY changes to understand:
+- Conventional commit format (feat:, fix:, chore:, docs:, test:, refactor:)
+- Branch naming conventions
+- Code quality standards
+- Git workflow requirements
+
 For Claude Code instances working on this codebase, comprehensive working documentation is maintained in `docs/claude-work/`:
 
-- **WORKING-STANDARDS.md** - Git workflow, code quality standards, and development guidelines
+- **WORKING-STANDARDS.md** - Git workflow, code quality standards, and development guidelines (CONSULT FIRST)
+- **DEVELOPMENT-PROCESS.md** - Systematic development cycle and quality assurance processes
 - **PROGRESS-TRACKER.md** - Session continuity, current work status, and context for resuming work
 - **CODEBASE-KNOWLEDGE.md** - Growing architectural insights, patterns, and development conventions
-- **DEVELOPMENT-PROCESS.md** - Systematic development cycle and quality assurance processes
 
-These files provide full context for autonomous development and should be consulted at the start of each working session.
+These files provide full context for autonomous development and should be consulted at the start of each working session and before any commits.
 
 ## JavaScript/TypeScript Extension Project
 
