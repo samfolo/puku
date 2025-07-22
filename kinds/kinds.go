@@ -75,4 +75,34 @@ var DefaultKinds = map[string]*Kind{
 		Name: "go_repo",
 		Type: ThirdParty,
 	},
+	"js_library": {
+		Name:         "js_library",
+		Type:         Lib,
+		SrcsAttr:     "srcs",
+		NonGoSources: true,
+	},
+	"vitest": {
+		Name:         "vitest", 
+		Type:         Test,
+		SrcsAttr:     "entry",
+		NonGoSources: true,
+	},
+	"jest": {
+		Name:         "jest",
+		Type:         Test,
+		SrcsAttr:     "entry", 
+		NonGoSources: true,
+	},
+	"mocha": {
+		Name:         "mocha",
+		Type:         Test,
+		SrcsAttr:     "entry",
+		NonGoSources: true,
+	},
+	"yarn_module": {
+		Name:              "yarn_module",
+		Type:              ThirdParty,
+		NonGoSources:      true,
+		DefaultVisibility: []string{"PUBLIC"},
+	},
 }

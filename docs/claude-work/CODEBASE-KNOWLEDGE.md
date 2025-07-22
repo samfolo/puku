@@ -13,6 +13,9 @@ Puku is a BUILD file maintenance tool for Go projects using the Please build sys
 - **generate.go**: Main orchestration logic for BUILD file generation
 - **deps.go**: Dependency resolution and third-party package handling  
 - **import.go**: Go import parsing and resolution to BUILD targets
+- **node/**: JavaScript/TypeScript support package
+  - **import.go**: Tree-sitter based JS/TS file parsing and import extraction
+  - **builtins.go**: Comprehensive Node.js builtin module detection
 - **Key Patterns**: Processes packages in dependency order, resolves imports through multiple fallback strategies
 
 #### edit/ - BUILD File Manipulation
@@ -40,6 +43,26 @@ Puku is a BUILD file maintenance tool for Go projects using the Please build sys
 #### migrate/ - Rule Migration
 - **migrate.go**: Migration from go_module to go_repo rules
 - **Key Patterns**: Preserves existing behavior during migration
+
+## JavaScript/TypeScript Extension Architecture
+
+### Design Decisions Made
+- **Tree-sitter for parsing**: Chose tree-sitter over simple regex/AST parsing for robust handling of complex JS/TS syntax
+- **Grammar selection by extension**: Automatic selection of JavaScript, TypeScript, or TSX grammar based on file extension
+- **Simple import classification**: Deferred complex alias vs third-party resolution to later dependency resolution phase
+- **Library-first file classification**: All files are library files unless explicitly test files (by pattern) or binary (by shebang)
+- **Comprehensive builtin detection**: Full Node.js builtin module list with both prefixed and non-prefixed forms
+
+### Integration Patterns
+- **Parallel to Go implementation**: JavaScript parsing follows same patterns as `generate/import.go` for consistency
+- **Reuses existing infrastructure**: Leverages existing `kinds.Type` system and BUILD file manipulation
+- **Extension point friendly**: `generate/node` package provides clean extension point for JS/TS support
+
+### Key Technical Choices
+- **File extensions supported**: .js, .jsx, .ts, .tsx, .mjs, .cjs
+- **Import types**: Relative (./foo), Builtin (fs, node:path), Asset (.css, .json), Bare (lodash, @types/node, ~/alias)
+- **File type detection**: Test files by naming patterns (.test., .spec.), binary only with shebang, everything else library
+- **Node.js builtin coverage**: 100+ builtin modules including submodules and node: prefixed versions
 
 ## Code Style and Conventions
 

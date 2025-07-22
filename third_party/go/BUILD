@@ -2,8 +2,8 @@ subinclude("///go//build_defs:go")
 
 go_toolchain(
     name = "toolchain",
-    version = CONFIG.GO_VERSION,
     install_std = False,
+    version = CONFIG.GO_VERSION,
 )
 
 go_stdlib(
@@ -178,7 +178,7 @@ go_repo(
     install = ["..."],
     licences = ["MIT"],
     module = "github.com/stretchr/testify",
-    version = "v1.8.4",
+    version = "v1.9.0",
     visibility = [
         "//config:all",
         "//e2e/codegen:all",
@@ -219,7 +219,7 @@ go_repo(
 go_repo(
     licences = ["MIT"],
     module = "github.com/stretchr/objx",
-    version = "v0.5.1",
+    version = "v0.5.2",
 )
 
 go_repo(
@@ -322,4 +322,10 @@ go_repo(
     licences = ["Apache-2.0"],
     module = "k8s.io/klog/v2",
     version = "v2.120.1",
+)
+
+go_repo(
+    licences = ["MIT"],
+    module = "github.com/smacker/go-tree-sitter",
+    version = "v0.0.0-20240827094217-dd81d9e9be82",
 )

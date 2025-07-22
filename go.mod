@@ -8,7 +8,8 @@ require (
 	github.com/google/licenseclassifier/v2 v2.0.0
 	github.com/peterebden/go-cli-init/v5 v5.2.1
 	github.com/please-build/buildtools v0.0.0-20240111140234-77ffe55926d9
-	github.com/stretchr/testify v1.8.4
+	github.com/smacker/go-tree-sitter v0.0.0-20240827094217-dd81d9e9be82
+	github.com/stretchr/testify v1.10.0
 	golang.org/x/mod v0.14.0
 	golang.org/x/sys v0.16.0
 	gopkg.in/op/go-logging.v1 v1.0.0-20160211212156-b2cb9fa56473
@@ -22,7 +23,6 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/sergi/go-diff v1.3.1 // indirect
-	github.com/stretchr/objx v0.5.1 // indirect
 	github.com/thought-machine/go-flags v1.6.3 // indirect
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/net v0.20.0 // indirect

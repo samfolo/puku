@@ -42,7 +42,7 @@ This document defines the established development cycle and systematic approach 
 - Write/update tests for the change
 - Run affected tests: `plz test //package:all`
 - Validate with full test suite if significant: `plz test //...`
-- Commit with clear, descriptive message
+- Commit with clear, descriptive message following conventional commit format (feat:, fix:, chore:, docs:, test:, refactor:)
 - Update progress tracker with status
 
 ### 6. Integration Validation

@@ -7,5 +7,6 @@ go_library(
         "//edit:all",
         "//eval:all",
         "//generate:all",
+        "//generate/node:all",
     ],
 )
