@@ -25,3 +25,8 @@ cmd = run //third_party/binary:golangci-lint -- run
 
 [BuildConfig]
 go-version = 1.23.2
+
+[Plugin "cc"]
+target = //plugins:cc
+defaultoptcppflags = --std=c++11 -O2 -DNDEBUG -Wall -Wextra -Werror -Wno-unused-parameter
+defaultdbgcppflags = --std=c++11 -g3 -DDEBUG -Wall -Wextra -Werror -Wno-unused-parameter

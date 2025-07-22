@@ -17,5 +17,11 @@ go_library(
         "builtins.go",
         "import.go",
     ],
-    deps = ["//kinds"],
+    deps = [
+        "///third_party/go/github.com_smacker_go-tree-sitter//:go-tree-sitter",
+        "///third_party/go/github.com_smacker_go-tree-sitter//javascript",
+        "///third_party/go/github.com_smacker_go-tree-sitter//typescript/tsx",
+        "///third_party/go/github.com_smacker_go-tree-sitter//typescript/typescript",
+        "//kinds",
+    ],
 )
